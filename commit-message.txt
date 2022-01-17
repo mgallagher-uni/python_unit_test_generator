@@ -1,0 +1,10 @@
+[WIP] Initial test directory and file generation
+
+First implementation of a test directory and test file generator.
+
+- Takes a path of a file directory
+- Generates a corresponding test directory
+- Test files structure analogous to original directory
+- For each .py file a test file is generated
+- For each class and function in the file a test function is generated.
+- Very basic initial implementation.
