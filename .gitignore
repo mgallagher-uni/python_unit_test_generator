@@ -6,3 +6,6 @@ __pycache__/
 
 prop_src/
 test_prop_src/
+
+commit-template.txt
+commit-message.txt
