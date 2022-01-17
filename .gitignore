@@ -1,4 +1,5 @@
 __pycache__/
+.pytest_cache
 
 # Editors
 .vscode/
@@ -6,3 +7,6 @@ __pycache__/
 
 prop_src/
 test_prop_src/
+
+commit-template.txt
+commit-message.txt
