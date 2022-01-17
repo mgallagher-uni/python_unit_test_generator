@@ -1,7 +1,6 @@
 import os
 import sys
 import ast
-from TestTemplateGenerator import TestTemplateGenerator
 
 
 class FileStructureGenerator:
@@ -13,11 +12,8 @@ class FileStructureGenerator:
             exit(0)
         else:
             self.root_dir = str(sys.argv[1])
-
-        self.test_generator = TestTemplateGenerator()
         
         self.traverse_directory(self.get_dir_object(self.root_dir))
-
 
     def get_dir_object(self, dir_name: str) -> os.DirEntry:
         '''Given the name of the directory find the os.DirEntry object'''
@@ -39,12 +35,11 @@ class FileStructureGenerator:
         # if file does not already exist
         if not os.path.exists(test_path):
             # create the test file in the corresponding location
-            self.test_generator.write_test_file(self.root_dir, ent.name, ent.path)
-
+            test_file = open( test_path, 'w')
+            test_file.write("print(\"Hello test file!\")")
+            test_file.close()
     
     def traverse_directory(self, ent: os.DirEntry) -> None:
-        '''Traverses through given directory creating corresponding test files in test directory.'''
-
         directory = os.scandir(ent.path)
         for sub_ent in directory:
             if sub_ent.is_dir():
