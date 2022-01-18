@@ -1,6 +1,5 @@
 import os
 import sys
-import ast
 from TestTemplateGenerator import TestTemplateGenerator
 
 
