@@ -1,19 +1,17 @@
 import os
 import sys
 import ast
+from pprint import pprint
+
+#temp
+import shutil
 
 class TestSuiteGenerator:
 
-    def __init__(self):
+    def __init__(self, root_dir: str):
 
         self.prefix = "test_"
-
-        if len(sys.argv) == 1:
-            print("No directory given")
-            exit(0)
-        else:
-            self.root_dir = str(sys.argv[1])
-
+        self.root_dir = root_dir
         self.filepath: str
         self.testpath: str
         
@@ -60,6 +58,7 @@ class TestSuiteGenerator:
 
         with open( self.filepath, 'r') as source:
             tree = ast.parse(source.read())
+            #print(ast.dump(tree, indent=4))
         
         analyzer = TreeAnalyzer()
         analyzer.visit(tree)
@@ -78,6 +77,11 @@ class TestSuiteGenerator:
         tree_dict = self.generate_tree()
 
         with open( self.testpath, 'a') as test_file:
+
+            for ClassDef in tree_dict["ClassDef"]:
+                pass
+
+
             for key in tree_dict.keys():
                 for syn in tree_dict[key]:
                     test_file.write(self.generate_test_case(syn))
@@ -89,15 +93,24 @@ class TestSuiteGenerator:
 
 class TreeAnalyzer(ast.NodeVisitor):
     def __init__(self):
+        
         self.tree_dict = {"ClassDef": [], "FunctionDef": []}
 
+
     def visit_ClassDef(self, node):
+        
+
         self.tree_dict["ClassDef"].append(node.name)
         self.generic_visit(node)
 
+
+
     def visit_FunctionDef(self, node):
+
         self.tree_dict["FunctionDef"].append(node.name)
         self.generic_visit(node)
+
+    
 
     def report(self):
         pprint(self.tree_dict)
@@ -105,4 +118,16 @@ class TreeAnalyzer(ast.NodeVisitor):
 
 
 if __name__ == "__main__":
-    TestSuiteGenerator().generate()
+
+    try:
+        root_dir = sys.argv[1]
+    except :
+        print("No directory given")
+        exit(0)
+
+    gen = TestSuiteGenerator(root_dir)
+    gen.generate()
+
+    if sys.argv[2] == "delete":
+        shutil.rmtree("test_tmp")
+

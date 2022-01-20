@@ -6,6 +6,8 @@ __pycache__/
 
 prop_src/
 test_prop_src/
+tmp/
+test_tmp/
 
 commit-template.txt
 commit-message.txt
