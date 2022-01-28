@@ -1,4 +1,5 @@
-[refactor] Simplify program flow with less classes
+[feat] First iteration of writing fixtures, inits
 
-- Combined the two generator classes to simplify some code
-- Gives the same results
+- TestCodeGenerator creates code strings for classes and functions
+- Takes output from CodeAnalyzer
+- Working version but needs more work
