@@ -3,8 +3,6 @@ import sys
 import ast
 from pprint import pprint
 
-#temp
-import shutil
 
 class TestSuiteGenerator:
 
@@ -60,7 +58,7 @@ class TestSuiteGenerator:
             tree = ast.parse(source.read())
             #print(ast.dump(tree, indent=4))
         
-        analyzer = TreeAnalyzer()
+        analyzer = ClassVisitor()
         analyzer.visit(tree)
         return analyzer.tree_dict
 
@@ -91,27 +89,17 @@ class TestSuiteGenerator:
 
     
 
-class TreeAnalyzer(ast.NodeVisitor):
+class ClassVisitor(ast.NodeVisitor):
     def __init__(self):
         
-        self.tree_dict = {"ClassDef": [], "FunctionDef": []}
-
+        self.tree_dict = {"ClassNodes": []}
 
     def visit_ClassDef(self, node):
-        
 
-        self.tree_dict["ClassDef"].append(node.name)
+        class_dict = {}
+        self.tree_dict["ClassDef"].append(node)
         self.generic_visit(node)
-
-
-
-    def visit_FunctionDef(self, node):
-
-        self.tree_dict["FunctionDef"].append(node.name)
-        self.generic_visit(node)
-
     
-
     def report(self):
         pprint(self.tree_dict)
     
@@ -127,7 +115,3 @@ if __name__ == "__main__":
 
     gen = TestSuiteGenerator(root_dir)
     gen.generate()
-
-    if sys.argv[2] == "delete":
-        shutil.rmtree("test_tmp")
-
