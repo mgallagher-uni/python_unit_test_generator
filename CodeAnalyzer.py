@@ -1,5 +1,6 @@
 import ast
 from pprint import pprint
+from ast2json import ast2json
 
 
 class CodeAnalyzer(ast.NodeVisitor):
@@ -9,26 +10,54 @@ class CodeAnalyzer(ast.NodeVisitor):
 
     def __init__(self):
         self.code_breakdown = {"classes": {}, "functions": {}}
+        self.class_linenos = []
 
     def visit_ClassDef(self, node) -> None:
 
+        self.class_linenos += list(range(node.lineno, node.end_lineno))
+
         methods = node.body  # is body always a list of functions?
         # find __init__ function
-        init = list(filter(CodeAnalyzer._find_init, methods))[0]
+        init = list(filter(CodeAnalyzer._is_init, methods))[0]
         # get init parameters and types
         params = CodeAnalyzer._get_params_from_FunctionDef(init)
         # add class info to code breakdown dictionary
+
         class_dict = {
             "params": params,
-            "methods": [func.name for func in methods].remove('__init__'),
+            "methods": {}
         }
+
+        for method in node.body:
+
+            if method.name == "__init__":
+                continue
+            else:
+                params = CodeAnalyzer._get_params_from_FunctionDef(method)
+
+                # get return type
+                returns = None
+                if type(method.returns) is ast.Name:
+                    returns = method.returns.id
+                elif type(method.returns) is ast.Subscript:
+                    returns = method.returns.slice.id  # can add optional info if needed
+
+                # add function info to code breakdown dictionary
+                func_dict = {"params": params, "returns": returns}
+            
+            class_dict["methods"][method.name] = func_dict
+
+
         self.code_breakdown["classes"][node.name] = class_dict
         self.generic_visit(node)
 
 
     def visit_FunctionDef(self, node) -> None:
 
-        if node.name == "__init__":
+        if node.lineno in self.class_linenos:
+            self.generic_visit(node)
+
+        elif node.name == "__init__":
             self.generic_visit(node)
         else:
             params = CodeAnalyzer._get_params_from_FunctionDef(node)
@@ -46,7 +75,7 @@ class CodeAnalyzer(ast.NodeVisitor):
             self.generic_visit(node)
 
 
-    def _find_init(node: ast.FunctionDef) -> bool:
+    def _is_init(node: ast.FunctionDef) -> bool:
         return node.name == "__init__"
 
     def _get_params_from_FunctionDef(node: ast.FunctionDef()) -> list:

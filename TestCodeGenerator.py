@@ -1,4 +1,6 @@
 import ast
+from ast2json import ast2json
+from pprint import pprint
 from CodeAnalyzer import CodeAnalyzer
 
 
@@ -7,7 +9,7 @@ class TestCodeGenerator:
 
         self.test_code = ""
 
-    def _generate_fixture_function(class_info):
+    def _generate_fixture_function(class_info) -> str:
 
         func_name = "temp_to_do"
         code_string = (
@@ -111,22 +113,25 @@ class Queue2:
             self.tail = 0
         return True
 
-    def dequeue(self) -> Optional[int]:
-        if self.size == 0:
-            return None
-        x = self.data[self.head]
-        self.size -= 1
-        self.head += 1
-        if self.head == self.max:
-            self.head = 0
-        return x
+def dequeue(self) -> Optional[int]:
+    if self.size == 0:
+        return None
+    x = self.data[self.head]
+    self.size -= 1
+    self.head += 1
+    if self.head == self.max:
+        self.head = 0
+    return x
 
 
 """
 
     tree = ast.parse(code)
+
     analyzer = CodeAnalyzer()
     analyzer.visit(tree)
+
+    analyzer.report()
 
     analyzer_out = analyzer.get_code_breakdown()
 
