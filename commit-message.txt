@@ -1,9 +1,7 @@
-Improve test generation with fixtures and inits
+Bug fixes for some unseen code patterns
 
-In order to add fixture generation and improve test function generation
-had to improve overall flow of generator.
-
-- can now generate basic fixtures and class initialisations in tests
-- test functions now specify whether function is a classes method
-- improved modularity of code and overall flow
-
+- Classes don't need to have init function
+- Inheritence now taken into consideration
+- Class body not necessarily functions only
+- Type hinting for improted classes
+- Added 'import pytest' to test files

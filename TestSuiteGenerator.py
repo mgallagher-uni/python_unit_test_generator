@@ -8,11 +8,9 @@ from FileGenerator import FileGenerator
 
 class TestSuiteGenerator:
     def __init__(self, root_dir: str):
-
         self.root_dir = root_dir
         self.filepath: str
         self.testpath: str
-
 
     def traverse_directory(self, ent: os.DirEntry) -> None:
         """Traverses through given directory creating corresponding test files in test directory."""
@@ -29,20 +27,18 @@ class TestSuiteGenerator:
 
         directory.close()
 
-    def _get_dir_object( dir_name: str ) -> os.DirEntry:
+    def _get_dir_object(dir_name: str) -> os.DirEntry:
         """Given the name of the directory find the os.DirEntry object"""
         temp_ents = os.scandir()
         for te in temp_ents:
             if te.name == dir_name:
                 temp_ents.close()
-                return te    
+                return te
 
     def generate_suite(self) -> None:
 
         dir_object = TestSuiteGenerator._get_dir_object(self.root_dir)
         self.traverse_directory(dir_object)
-
-
 
 
 if __name__ == "__main__":
