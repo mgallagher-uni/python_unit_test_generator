@@ -3,22 +3,16 @@ import sys
 import ast
 from pprint import pprint
 
+from FileGenerator import FileGenerator
+
 
 class TestSuiteGenerator:
     def __init__(self, root_dir: str):
 
-        self.prefix = "test_"
         self.root_dir = root_dir
         self.filepath: str
         self.testpath: str
 
-    def get_dir_object(self, dir_name: str) -> os.DirEntry:
-        """Given the name of the directory find the os.DirEntry object"""
-        temp_ents = os.scandir()
-        for te in temp_ents:
-            if te.name == dir_name:
-                temp_ents.close()
-                return te
 
     def traverse_directory(self, ent: os.DirEntry) -> None:
         """Traverses through given directory creating corresponding test files in test directory."""
@@ -27,75 +21,28 @@ class TestSuiteGenerator:
         for sub_ent in directory:
             if sub_ent.is_dir():
                 self.traverse_directory(sub_ent)
+
             elif sub_ent.name.endswith(".py"):
-                self.filepath = sub_ent.path
-                self.create_test_file()
+
+                tfg = FileGenerator(self.root_dir, sub_ent.path)
+                tfg.generate_file()
+
         directory.close()
 
-    def create_test_file(self) -> None:
-        """Create a test file for a python module in the corresponding folder in the test directory."""
+    def _get_dir_object( dir_name: str ) -> os.DirEntry:
+        """Given the name of the directory find the os.DirEntry object"""
+        temp_ents = os.scandir()
+        for te in temp_ents:
+            if te.name == dir_name:
+                temp_ents.close()
+                return te    
 
-        # get output testpath from filepath
-        name = os.path.split(self.filepath)[1]
-        self.testpath = self.filepath.replace(
-            self.root_dir, self.prefix + self.root_dir
-        ).replace(name, self.prefix + name)
+    def generate_suite(self) -> None:
 
-        # if route does not exist create it
-        os.makedirs(os.path.split(self.testpath)[0], exist_ok=True)
-
-        # if file does not already exist
-        if not os.path.exists(self.testpath):
-            # create the test file in the corresponding location
-            self.write_test_file()
-
-    def generate_tree(self) -> dict:
-        """Creates a model of an AST from a .py file"""
-
-        with open(self.filepath, "r") as source:
-            tree = ast.parse(source.read())
-            # print(ast.dump(tree, indent=4))
-
-        analyzer = ClassVisitor()
-        analyzer.visit(tree)
-        return analyzer.tree_dict
-
-    def generate_test_case(self, SUT) -> str:
-        """Create a test case function for a given SUT"""
-
-        test_string = f"def test_{SUT}():\n\tassert True\n\n"
-        return test_string
-
-    def write_test_file(self) -> None:
-
-        tree_dict = self.generate_tree()
-
-        with open(self.testpath, "a") as test_file:
-
-            for ClassDef in tree_dict["ClassDef"]:
-                pass
-
-            for key in tree_dict.keys():
-                for syn in tree_dict[key]:
-                    test_file.write(self.generate_test_case(syn))
-
-    def generate(self) -> None:
-        self.traverse_directory(self.get_dir_object(self.root_dir))
+        dir_object = TestSuiteGenerator._get_dir_object(self.root_dir)
+        self.traverse_directory(dir_object)
 
 
-class ClassVisitor(ast.NodeVisitor):
-    def __init__(self):
-
-        self.tree_dict = {"ClassNodes": []}
-
-    def visit_ClassDef(self, node):
-
-        class_dict = {}
-        self.tree_dict["ClassDef"].append(node)
-        self.generic_visit(node)
-
-    def report(self):
-        pprint(self.tree_dict)
 
 
 if __name__ == "__main__":
@@ -107,4 +54,4 @@ if __name__ == "__main__":
         exit(0)
 
     gen = TestSuiteGenerator(root_dir)
-    gen.generate()
+    gen.generate_suite()

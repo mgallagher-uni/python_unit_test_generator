@@ -1,6 +1,5 @@
 import ast
 from pprint import pprint
-from ast2json import ast2json
 
 
 class CodeAnalyzer(ast.NodeVisitor):
@@ -9,7 +8,7 @@ class CodeAnalyzer(ast.NodeVisitor):
     """
 
     def __init__(self):
-        self.code_breakdown = {"classes": {}, "functions": {}}
+        self.code_dict = {"classes": {}, "functions": {}}
         self.class_linenos = []
 
     def visit_ClassDef(self, node) -> None:
@@ -48,7 +47,7 @@ class CodeAnalyzer(ast.NodeVisitor):
             class_dict["methods"][method.name] = func_dict
 
 
-        self.code_breakdown["classes"][node.name] = class_dict
+        self.code_dict["classes"][node.name] = class_dict
         self.generic_visit(node)
 
 
@@ -71,7 +70,7 @@ class CodeAnalyzer(ast.NodeVisitor):
 
             # add function info to code breakdown dictionary
             func_dict = {"params": params, "returns": returns}
-            self.code_breakdown["functions"][node.name] = func_dict
+            self.code_dict["functions"][node.name] = func_dict
             self.generic_visit(node)
 
 
@@ -86,8 +85,8 @@ class CodeAnalyzer(ast.NodeVisitor):
         params.remove(("self", ""))
         return params
 
-    def get_code_breakdown(self) -> dict:
-        return self.code_breakdown
+    def get_code_dict(self) -> dict:
+        return self.code_dict
 
     def report(self) -> None:
-        pprint(self.code_breakdown)
+        pprint(self.code_dict)

@@ -1,5 +1,9 @@
-[feat] First iteration of writing fixtures, inits
+Improve test generation with fixtures and inits
 
-- TestCodeGenerator creates code strings for classes and functions
-- Takes output from CodeAnalyzer
-- Working version but needs more work
+In order to add fixture generation and improve test function generation
+had to improve overall flow of generator.
+
+- can now generate basic fixtures and class initialisations in tests
+- test functions now specify whether function is a classes method
+- improved modularity of code and overall flow
+
