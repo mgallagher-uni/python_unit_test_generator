@@ -5,6 +5,9 @@ from pprint import pprint
 
 from FileGenerator import FileGenerator
 
+parentddir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
+sys.path.append(parentddir)
+
 
 class TestSuiteGenerator:
     def __init__(self, root_dir: str):
@@ -36,18 +39,14 @@ class TestSuiteGenerator:
                 return te
 
     def generate_suite(self) -> None:
-
         dir_object = TestSuiteGenerator._get_dir_object(self.root_dir)
         self.traverse_directory(dir_object)
 
 
-if __name__ == "__main__":
 
-    try:
-        root_dir = sys.argv[1]
-    except:
-        print("No directory given")
-        exit(0)
+# if __name__ == "__main__":
 
-    gen = TestSuiteGenerator(root_dir)
-    gen.generate_suite()
+#     # root_dir = "prop_src"
+#     # tsg = TestSuiteGenerator(root_dir)
+
+#     print(TestSuiteGenerator._get_dir_object("FileGenerator.py"))

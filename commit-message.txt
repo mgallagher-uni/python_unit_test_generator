@@ -1,7 +1,4 @@
-Bug fixes for some unseen code patterns
+Structured generator into a package
 
-- Classes don't need to have init function
-- Inheritence now taken into consideration
-- Class body not necessarily functions only
-- Type hinting for improted classes
-- Added 'import pytest' to test files
+- generation files now run from generator package
+- added code to account for the relative path to root
