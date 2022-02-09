@@ -2,11 +2,11 @@ import pytest
 
 @pytest.fixture
 def temp_to_do():
-	return FileGenerator( [('root_dir', 'str'), ('filepath', 'str')] )
+	return FileGenerator( 'root_dir', 'filepath' )
 
-def test_filegenerator__get_out_path():
+def test__get_out_path():
 	assert True
 
-def test_filegenerator_generate_file():
+def test_generate_file():
 	assert True
 

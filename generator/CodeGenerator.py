@@ -1,11 +1,10 @@
 import ast
 from typing import Optional
-
 from pprint import pprint
 
 
 class CodeGenerator:
-    def __init__(self, code_dict) -> None:
+    def __init__(self, code_dict: dict) -> None:
         self.code_dict = code_dict
         self.test_code = ""
         self.unique_functions = self.check_unique_function_names()
@@ -14,6 +13,10 @@ class CodeGenerator:
 
         # generate imports
         self.test_code += "import pytest\n\n"
+
+        # from generator.TestSuiteGenerator import TestSuiteGenerator
+        # from { path.through.folders.to.module } import { class used? moudule? }
+        #       or we could just imoprt moudlue and use class.where needed
 
         for class_info in self.code_dict["classes"].items():
             self.test_code += self.generate_fixture_function(class_info)
@@ -36,6 +39,13 @@ class CodeGenerator:
             names.append(func)
 
         return len(names) == len(set(names))
+
+    # def generate_import(self, ):
+
+    #     code_string = f"from { path_to_modeule } import { class_ }"
+    #     return code_string
+
+
 
     def generate_fixture_function(self, class_info: tuple) -> str:
 
@@ -63,11 +73,12 @@ class CodeGenerator:
 
         return class_name + f"( { params } )"
 
-    def generate_test_case(self, func_info: tuple, class_name: Optional[str] = None) -> str:
+    def generate_test_case(
+        self, func_info: tuple, class_name: Optional[str] = None
+    ) -> str:
         """Create a test case for a given function"""
 
         # if function is a class's method
-
         if class_name and not self.unique_functions:
             func_name = class_name.lower() + "_" + func_info[0]
         else:

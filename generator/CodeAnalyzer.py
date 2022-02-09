@@ -51,7 +51,7 @@ class CodeAnalyzer(ast.NodeVisitor):
                 if type(method.returns) is ast.Name:
                     returns = method.returns.id
                 elif type(method.returns) is ast.Subscript:
-                    returns = method.returns.slice.id  # can add optional info if needed
+                    returns = method.returns.value.id  # can add optional info if needed
 
                 # add function info to code breakdown dictionary
                 func_dict = {"params": params, "returns": returns}
@@ -69,7 +69,7 @@ class CodeAnalyzer(ast.NodeVisitor):
         elif node.name == "__init__":
             self.generic_visit(node)
         else:
-            params = CodeAnalyzer._get_params_from_FunctionDef(node)
+            params = self.get_params_from_FunctionDef(node)
 
             # get return type
             returns = None

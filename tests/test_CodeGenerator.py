@@ -2,23 +2,26 @@ import pytest
 
 @pytest.fixture
 def temp_to_do():
-	return CodeGenerator( [('code_dict', '')] )
+	return CodeGenerator( {} )
 
-def test_codegenerator_generate_full():
+def test_generate_full():
 	assert True
 
-def test_codegenerator__generate_fixture_function():
+def test_check_unique_function_names():
 	assert True
 
-def test_codegenerator__generate_class_initialisation():
+def test_generate_fixture_function():
 	assert True
 
-def test_codegenerator__generate_test_case():
+def test_generate_class_initialisation():
 	assert True
 
-def test_codegenerator_get_test_code():
+def test_generate_test_case():
 	assert True
 
-def test_codegenerator_report():
+def test_get_test_code():
+	assert True
+
+def test_report():
 	assert True
 

@@ -1,31 +1,21 @@
 import pytest
-
-import os, sys
-parentddir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
-sys.path.append(parentddir)
-
 from generator.TestSuiteGenerator import TestSuiteGenerator
-
 
 @pytest.fixture
 def generator():
-	return TestSuiteGenerator( 'root_dir' )
+	return TestSuiteGenerator('prop_src')
 
-def test_testsuitegenerator_traverse_directory():
+@pytest.fixture
+def prop_src():
+	pass
+
+def test_traverse_directory():
 	assert True
 
-def test_testsuitegenerator__get_dir_object(generator):
+def test_generation_with_nonexistant_root_dir():
+	with pytest.raises(SystemExit):
+		no_root_gen = TestSuiteGenerator('non_existant')
 
-
-	incorrect_filename = "not_a_file"
-
-	result = generator._get_dir_object( incorrect_filename )
-	
-	assert result is None
-
-def test_testsuitegenerator__get_dir_object():
-	assert True
-
-def test_testsuitegenerator_generate_suite():
+def test_generate_suite():
 	assert True
 

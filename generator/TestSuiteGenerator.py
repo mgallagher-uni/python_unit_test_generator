@@ -3,17 +3,19 @@ import sys
 import ast
 from pprint import pprint
 
-from FileGenerator import FileGenerator
-
 parentddir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
 sys.path.append(parentddir)
 
+from generator.FileGenerator import FileGenerator
+
 
 class TestSuiteGenerator:
-    def __init__(self, root_dir: str):
-        self.root_dir = root_dir
-        self.filepath: str
-        self.testpath: str
+    def __init__(self, dir_name: str):
+
+        self.root_name: str = dir_name
+        self.root_obj: os.DirEntry = self.get_dir_object(dir_name)
+        if self.root_obj == None:
+            sys.exit(f"Could not find folder: {sys.path[-1]}\\{dir_name}")
 
     def traverse_directory(self, ent: os.DirEntry) -> None:
         """Traverses through given directory creating corresponding test files in test directory."""
@@ -24,13 +26,12 @@ class TestSuiteGenerator:
                 self.traverse_directory(sub_ent)
 
             elif sub_ent.name.endswith(".py"):
-
-                tfg = FileGenerator(self.root_dir, sub_ent.path)
+                tfg = FileGenerator(self.root_name, sub_ent.path)
                 tfg.generate_file()
 
         directory.close()
 
-    def _get_dir_object(dir_name: str) -> os.DirEntry:
+    def get_dir_object(self, dir_name: str) -> os.DirEntry:
         """Given the name of the directory find the os.DirEntry object"""
         temp_ents = os.scandir()
         for te in temp_ents:
@@ -39,14 +40,4 @@ class TestSuiteGenerator:
                 return te
 
     def generate_suite(self) -> None:
-        dir_object = TestSuiteGenerator._get_dir_object(self.root_dir)
-        self.traverse_directory(dir_object)
-
-
-
-# if __name__ == "__main__":
-
-#     # root_dir = "prop_src"
-#     # tsg = TestSuiteGenerator(root_dir)
-
-#     print(TestSuiteGenerator._get_dir_object("FileGenerator.py"))
+        self.traverse_directory(self.root_obj)
