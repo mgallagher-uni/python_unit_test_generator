@@ -2,6 +2,7 @@ import ast
 from pprint import pprint
 
 
+
 class CodeAnalyzer(ast.NodeVisitor):
     """
     An ast NodeVisitor which builds a dictionary representation of a tree
@@ -156,7 +157,6 @@ class Queue(ast.NodeVisitor):
         if self.head == self.max:
             self.head = 0
         return x
-
 """
     tree = ast.parse(code)
     print(ast.dump(tree, indent=4))

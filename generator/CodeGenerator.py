@@ -16,7 +16,7 @@ class CodeGenerator:
 
         # from generator.TestSuiteGenerator import TestSuiteGenerator
         # from { path.through.folders.to.module } import { class used? moudule? }
-        #       or we could just imoprt moudlue and use class.where needed
+        #       or we could just import moudlue and use class.where needed
 
         for class_info in self.code_dict["classes"].items():
             self.test_code += self.generate_fixture_function(class_info)
