@@ -16,7 +16,7 @@ class CodeGenerator:
         self.test_code += "import pytest\n\n"
 
         for class_info in self.code_dict["classes"].items():
-            self.test_code += CodeGenerator._generate_fixture_function(class_info)
+            self.test_code += self.generate_fixture_function(class_info)
 
         for _class in self.code_dict["classes"].keys():
             for meth_info in self.code_dict["classes"][_class]["methods"].items():
@@ -37,10 +37,10 @@ class CodeGenerator:
 
         return len(names) == len(set(names))
 
-    def _generate_fixture_function(class_info: tuple) -> str:
+    def generate_fixture_function(self, class_info: tuple) -> str:
 
         fixture_name = "temp_to_do"
-        class_init = CodeGenerator._generate_class_initialisation(class_info)
+        class_init = self.generate_class_initialisation(class_info)
 
         code_string = (
             f"@pytest.fixture\ndef { fixture_name }():\n"
@@ -52,7 +52,7 @@ class CodeGenerator:
 
         return code_string
 
-    def _generate_class_initialisation(class_info: tuple) -> str:
+    def generate_class_initialisation(self, class_info: tuple) -> str:
 
         class_name = class_info[0]
         params = class_info[1]["params"]

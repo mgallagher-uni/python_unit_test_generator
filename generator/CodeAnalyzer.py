@@ -31,7 +31,7 @@ class CodeAnalyzer(ast.NodeVisitor):
         init = list(filter(CodeAnalyzer._is_init, methods))
         if init:
             # get init parameters and types
-            params = CodeAnalyzer._get_params_from_FunctionDef(init[0])
+            params = self.get_params_from_FunctionDef(init[0])
         else:
             params = []
 
@@ -44,7 +44,7 @@ class CodeAnalyzer(ast.NodeVisitor):
             if method.name == "__init__":
                 continue
             else:
-                params = CodeAnalyzer._get_params_from_FunctionDef(method)
+                params = self.get_params_from_FunctionDef(method)
 
                 # get return type
                 returns = None
@@ -89,13 +89,7 @@ class CodeAnalyzer(ast.NodeVisitor):
     def _is_function(node: ast.AST) -> bool:
         return isinstance(node, ast.FunctionDef)
 
-    def _get_params_from_FunctionDef(node: ast.FunctionDef()) -> list:
-        # params = [
-        #     (arg.arg, arg.annotation.id)
-        #     if isinstance(arg.annotation, ast.Name)
-        #     else (arg.arg, arg.annotation.value.id + "." + arg.annotation.attr)
-        #     for arg in node.args.args
-        # ]
+    def get_params_from_FunctionDef(self, node: ast.FunctionDef()) -> list:
 
         params = []
 
