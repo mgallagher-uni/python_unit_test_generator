@@ -41,3 +41,6 @@ class TestSuiteGenerator:
 
     def generate_suite(self) -> None:
         self.traverse_directory(self.root_obj)
+        with open( "conftest.py", "w+" ) as f :
+            f.write("")
+
