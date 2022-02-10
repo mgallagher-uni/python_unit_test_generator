@@ -1,4 +1,7 @@
-Structured generator into a package
+Add conf and option to configure it
 
-- generation files now run from generator package
-- added code to account for the relative path to root
+- generation options/settings stored in configuration file
+- file is loaded in at each run
+- user given option to configure before run
+- changed settings are stored for later runs
+- Introduces option of user input for test genration

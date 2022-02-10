@@ -11,7 +11,9 @@ from generator.FileGenerator import FileGenerator
 
 class TestSuiteGenerator:
 
-    def __init__(self, dir_name: str):
+    def __init__(self, conf:dict, dir_name: str):
+
+        self.conf: dict = conf
         self.root_name: str = dir_name
         self.root_obj: os.DirEntry = self.get_dir_object(dir_name)
         if self.root_obj == None:
@@ -50,6 +52,8 @@ class TestSuiteGenerator:
                 return te
 
     def generate_suite(self) -> None:
+
+        print(self.conf)
 
         self.traverse_directory(self.root_obj)
         with open( "conftest.py", "w+" ) as f :
