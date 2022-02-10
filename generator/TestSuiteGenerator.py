@@ -10,8 +10,8 @@ from generator.FileGenerator import FileGenerator
 
 
 class TestSuiteGenerator:
-    def __init__(self, dir_name: str):
 
+    def __init__(self, dir_name: str):
         self.root_name: str = dir_name
         self.root_obj: os.DirEntry = self.get_dir_object(dir_name)
         if self.root_obj == None:
@@ -20,9 +20,19 @@ class TestSuiteGenerator:
     def traverse_directory(self, ent: os.DirEntry) -> None:
         """Traverses through given directory creating corresponding test files in test directory."""
 
+        print(f"Generator looking in: {ent.path[2:]}")
+
+        
         directory = os.scandir(ent.path)
         for sub_ent in directory:
-            if sub_ent.is_dir():
+
+            # don't crete for files or folders starting with __
+            # could create a git ignore type system
+            
+            if sub_ent.name.startswith('__'):
+                continue
+
+            elif sub_ent.is_dir():
                 self.traverse_directory(sub_ent)
 
             elif sub_ent.name.endswith(".py"):
@@ -40,6 +50,7 @@ class TestSuiteGenerator:
                 return te
 
     def generate_suite(self) -> None:
+
         self.traverse_directory(self.root_obj)
         with open( "conftest.py", "w+" ) as f :
             f.write("")

@@ -25,9 +25,12 @@ class FileGenerator:
 
         # if file already exists avoid overwrite
         if os.path.exists(self.testpath):
-            print(self.testpath + " already exists. Avoiding overwrite")
+            print(self.testpath[2:] + " already exists. Avoiding overwrite")
 
         else:
+
+            print(f"Creating test script for: { self.filepath[2:] }")
+
             # if route does not exist create it
             os.makedirs(os.path.split(self.testpath)[0], exist_ok=True)
 
@@ -41,7 +44,7 @@ class FileGenerator:
             code_dict = analyzer.code_dict
 
             # create test file code from code details
-            tcg = CodeGenerator(code_dict)
+            tcg = CodeGenerator(self.filepath, code_dict)
             tcg.generate_full()
             test_code = tcg.get_test_code()
 

@@ -4,18 +4,22 @@ from pprint import pprint
 
 
 class CodeGenerator:
-    def __init__(self, code_dict: dict) -> None:
+    def __init__(self, filepath: str, code_dict: dict) -> None:
+
+        self.filepath = filepath
         self.code_dict = code_dict
-        self.test_code = ""
         self.unique_functions = self.check_unique_function_names()
+        self.test_code = ""
 
     def generate_full(self):
 
         # generate imports
-        self.test_code += "import pytest\n\n"
+        self.test_code += "import pytest\n"
+
+        self.test_code += self.generate_import()
 
         # from generator.TestSuiteGenerator import TestSuiteGenerator
-        # from { path.through.folders.to.module } import { class used? moudule? }
+        # from { path.through.folders.to.module } import { class used? module? }
         #       or we could just import moudlue and use class.where needed
 
         for class_info in self.code_dict["classes"].items():
@@ -40,12 +44,19 @@ class CodeGenerator:
 
         return len(names) == len(set(names))
 
-    # def generate_import(self, ):
+    def generate_import(self):
 
-    #     code_string = f"from { path_to_modeule } import { class_ }"
-    #     return code_string
+        import_path = ".".join(self.filepath[:-3].split("\\")[1:])
+        code_string = f"from { import_path } import " + ", ".join(
+            list(self.code_dict["classes"].keys())
+        )
 
+        if len(self.code_dict["functions"].keys()) != 0:
+            code_string += ", " + ", ".join(list(self.code_dict["functions"].keys()))
 
+        code_string += "\n\n"
+
+        return code_string
 
     def generate_fixture_function(self, class_info: tuple) -> str:
 
