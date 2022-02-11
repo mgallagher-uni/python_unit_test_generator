@@ -27,19 +27,19 @@ class TestSuiteGenerator:
         
         directory = os.scandir(ent.path)
         for sub_ent in directory:
-
-            # don't crete for files or folders starting with __
-            # could create a git ignore type system
             
-            if sub_ent.name.startswith('__'):
-                continue
-
-            elif sub_ent.is_dir():
-                self.traverse_directory(sub_ent)
+            if sub_ent.is_dir():
+                if sub_ent.name in self.conf["ignore_folders"]:
+                    continue
+                else:
+                    self.traverse_directory(sub_ent)
 
             elif sub_ent.name.endswith(".py"):
-                tfg = FileGenerator(self.root_name, sub_ent.path)
-                tfg.generate_file()
+                if sub_ent.name in self.conf["ignore_files"]:
+                    continue
+                else:
+                    tfg = FileGenerator(self.root_name, sub_ent.path)
+                    tfg.generate_file()
 
         directory.close()
 
@@ -52,9 +52,6 @@ class TestSuiteGenerator:
                 return te
 
     def generate_suite(self) -> None:
-
-        print(self.conf)
-
         self.traverse_directory(self.root_obj)
         with open( "conftest.py", "w+" ) as f :
             f.write("")

@@ -47,12 +47,10 @@ class CodeGenerator:
     def generate_import(self):
 
         import_path = ".".join(self.filepath[:-3].split("\\")[1:])
-        code_string = f"from { import_path } import " + ", ".join(
-            list(self.code_dict["classes"].keys())
-        )
+        code_string = f"from { import_path } import " + ", ".join(list(self.code_dict["classes"].keys()))
 
         if len(self.code_dict["functions"].keys()) != 0:
-            code_string += ", " + ", ".join(list(self.code_dict["functions"].keys()))
+            code_string += ", ".join(list(self.code_dict["functions"].keys()))
 
         code_string += "\n\n"
 
