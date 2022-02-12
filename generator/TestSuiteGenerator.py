@@ -1,6 +1,7 @@
 import os
 import sys
 import ast
+
 from pprint import pprint
 
 parentddir = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
@@ -13,7 +14,7 @@ class TestSuiteGenerator:
 
     def __init__(self, conf:dict, dir_name: str):
 
-        self.conf: dict = conf
+        self.conf:dict = conf
         self.root_name: str = dir_name
         self.root_obj: os.DirEntry = self.get_dir_object(dir_name)
         if self.root_obj == None:
@@ -38,7 +39,7 @@ class TestSuiteGenerator:
                 if sub_ent.name in self.conf["ignore_files"]:
                     continue
                 else:
-                    tfg = FileGenerator(self.root_name, sub_ent.path)
+                    tfg = FileGenerator(self.conf, self.root_name, sub_ent.path)
                     tfg.generate_file()
 
         directory.close()
@@ -53,6 +54,6 @@ class TestSuiteGenerator:
 
     def generate_suite(self) -> None:
         self.traverse_directory(self.root_obj)
-        with open( "conftest.py", "w+" ) as f :
+        with open( "conftest.py", "w+" ) as f:
             f.write("")
 

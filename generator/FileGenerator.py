@@ -10,10 +10,12 @@ from generator.CodeGenerator import CodeGenerator
 
 
 class FileGenerator:
-    def __init__(self, root_dir: str, filepath: str) -> None:
-        self.root_dir = root_dir
-        self.filepath = filepath
-        self.testpath = FileGenerator._get_out_path(root_dir, filepath)
+    def __init__(self, conf: dict, root_dir: str, filepath: str) -> None:
+
+        self.conf: dict = conf
+        self.root_dir: str = root_dir
+        self.filepath: str = filepath
+        self.testpath: str = FileGenerator._get_out_path(root_dir, filepath)
 
     def _get_out_path(root_dir: str, filepath: str) -> str:
         name = os.path.split(filepath)[1]
@@ -44,7 +46,7 @@ class FileGenerator:
             code_dict = analyzer.code_dict
 
             # create test file code from code details
-            tcg = CodeGenerator(self.filepath, code_dict)
+            tcg = CodeGenerator(self.conf, self.filepath, code_dict)
             tcg.generate_full()
             test_code = tcg.get_test_code()
 

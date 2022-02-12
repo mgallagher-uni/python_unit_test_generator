@@ -1,16 +1,15 @@
 import pytest
 import os
 import shutil
+import json
 from generator.TestSuiteGenerator import TestSuiteGenerator
 
 
 @pytest.fixture
 def conf():
-    return {
-        "ignore_folders": ["__pycache__"],
-        "ignore_files": ["__init__.py", "__main__.py"],
-        "class_names_in_functions": False,
-    }
+    with open("tests\\conf.json","r") as json_file:
+        conf = json.load( json_file )
+    return conf
 
 
 @pytest.fixture
