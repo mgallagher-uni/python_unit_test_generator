@@ -10,18 +10,24 @@ from generator.CodeGenerator import CodeGenerator
 
 
 class FileGenerator:
-    def __init__(self, conf: dict, root_dir: str, filepath: str) -> None:
+    def __init__(self, conf: dict, root_name: str, filepath: str) -> None:
 
         self.conf: dict = conf
-        self.root_dir: str = root_dir
+        self.root_name: str = root_name
         self.filepath: str = filepath
-        self.testpath: str = FileGenerator._get_out_path(root_dir, filepath)
+        self.testpath: str = FileGenerator._get_out_path(root_name, filepath)
 
-    def _get_out_path(root_dir: str, filepath: str) -> str:
+    def _get_out_path(root_name: str, filepath: str) -> str:
+
         name = os.path.split(filepath)[1]
-        return filepath.replace(root_dir, "test_" + root_dir).replace(
-            name, "test_" + name
-        )
+
+        # if generating for a single file
+        if name == root_name:
+            result = ".\\test_" + name
+        else:
+            result = filepath.replace(root_name, "test_" + root_name).replace(name, "test_" + name)
+
+        return result
 
     def generate_file(self):
 

@@ -7,7 +7,7 @@ from tools.input_prompt_types import *
 from TestSuiteGenerator import TestSuiteGenerator
 
 try:
-    root_dir = sys.argv[1]
+    root = sys.argv[1]
 except:
     directory = os.scandir()
     print()
@@ -22,7 +22,7 @@ except:
             print("\t" + ent.name)
     print()
 
-    root_dir = input("Enter folder or file name: ")
+    root = input("Enter folder or file name: ")
 
 with open("generator\\conf.json", "r") as j:
     conf = json.load(j)
@@ -67,5 +67,5 @@ Add class names to test functions: { conf["class_names_in_functions"] }
 """)
 
 # run the generator
-gen = TestSuiteGenerator(conf, root_dir)
+gen = TestSuiteGenerator(conf, root)
 gen.generate_suite()

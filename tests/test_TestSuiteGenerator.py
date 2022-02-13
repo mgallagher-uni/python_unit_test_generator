@@ -35,7 +35,7 @@ def mock_src_generated():
         f.write("File is not a .py script")
 
 
-def test_generator_with_nonexistant_root_dir():
+def test_generator_with_nonexistant_root_():
     with pytest.raises(SystemExit):
         no_root_gen = TestSuiteGenerator(conf, "non_existant")
 
