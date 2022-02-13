@@ -1,3 +1,4 @@
+import os
 import sys
 import json
 import shutil
@@ -5,10 +6,20 @@ import shutil
 from tools.input_prompt_types import *
 from TestSuiteGenerator import TestSuiteGenerator
 
-try:
-    root_dir = sys.argv[1]
-except:
-    sys.exit("No directory given.")
+directory = os.scandir()
+print()
+print("Available folders:")
+for ent in directory:
+    if ent.is_dir() and not ent.name.startswith("."):
+        print("\t" + ent.name)
+print()
+print("Available files:")
+for ent in directory:
+    if ent.is_file() and ent.name.endswith(".py"):
+        print("\t" + ent.name)
+print()
+
+root_dir = input("Enter folder or file name: ")
 
 with open("generator\\conf.json", "r") as j:
     conf = json.load(j)

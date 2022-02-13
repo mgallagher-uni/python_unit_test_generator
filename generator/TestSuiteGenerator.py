@@ -25,7 +25,6 @@ class TestSuiteGenerator:
 
         print(f"Generator looking in: {ent.path[2:]}")
 
-        
         directory = os.scandir(ent.path)
         for sub_ent in directory:
             

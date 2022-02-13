@@ -100,28 +100,17 @@ class CodeAnalyzer(ast.NodeVisitor):
 
     def _is_setter(node: ast.FunctionDef) -> bool:
         """Checks for several attributes of a setter function"""
-
         try:
             if not node.name.startswith("set_"):
-                print(1)
                 return False
             elif not "self" in [ arg.arg for arg in node.args.args ]:
-                print(2)
                 return False
             elif not len(node.body) == 1 and type(node.body[0]) is ast.Assign:
-                print(3)
                 return False
             elif not node.body[0].targets.value.id == "self":
-                print(4)
                 return False
             return True
         except AttributeError:
-            print(node.name)
-            print()
-            print(ast.dump(node, indent=4))
-            print()
-
-
             return False
 
     def _is_getter(node: ast.FunctionDef) -> bool:
