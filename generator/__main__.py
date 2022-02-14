@@ -30,7 +30,7 @@ with open("generator\\conf.json", "r") as j:
 
 #user configure some settings
 if input_y_n("Configure settings?"):
-
+    
     # Generate for setter/getters?
     conf["setters_getters"] = input_y_n("Generate tests for setter/getters?")
 

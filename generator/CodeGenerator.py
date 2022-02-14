@@ -28,11 +28,11 @@ class CodeGenerator:
 
         if self.setters_getters:
             for set_info in self.code_dict["classes"][_class]["setters"].items():
-                self.test_code += "IT's a SeTTEer\n"
+                self.test_code += "# IT's a SeTTEer\n"
                 self.test_code += self.generate_test_case(set_info, _class)
 
             for get_info in self.code_dict["classes"][_class]["getters"].items():
-                self.test_code += "IT's a GeTTEer\n"
+                self.test_code += "# IT's a GeTTEer\n"
                 self.test_code += self.generate_test_case(get_info, _class)
 
 

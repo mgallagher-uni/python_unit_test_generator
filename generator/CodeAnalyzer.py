@@ -16,7 +16,7 @@ class CodeAnalyzer(ast.NodeVisitor):
         self.class_linenos += list(range(node.lineno, node.end_lineno))
 
         methods = node.body
-        methods = list(filter(CodeAnalyzer._is_function, methods))
+        methods = list(filter( lambda node: isinstance(node, ast.FunctionDef), methods))
 
         # does class inherit from base class/es
         bases = [
@@ -30,7 +30,7 @@ class CodeAnalyzer(ast.NodeVisitor):
 
         # does class have an __init__ function
         # find __init__ function
-        init = list(filter(CodeAnalyzer._is_init, methods))
+        init = list(filter( lambda node: node.name == "__init__", methods))
         if init:
             # get init parameters and types
             params = self.get_params_from_FunctionDef(init[0])
@@ -63,7 +63,6 @@ class CodeAnalyzer(ast.NodeVisitor):
 
             elif CodeAnalyzer._is_getter(method):
                 class_dict["getters"][method.name] = func_dict
-
             else:
                 class_dict["methods"][method.name] = func_dict
 
@@ -92,12 +91,6 @@ class CodeAnalyzer(ast.NodeVisitor):
             self.code_dict["functions"][node.name] = func_dict
             self.generic_visit(node)
 
-    def _is_init(node: ast.FunctionDef) -> bool:
-        return node.name == "__init__"
-
-    def _is_function(node: ast.AST) -> bool:
-        return isinstance(node, ast.FunctionDef)
-
     def _is_setter(node: ast.FunctionDef) -> bool:
         """Checks for several attributes of a setter function"""
         try:
@@ -107,7 +100,7 @@ class CodeAnalyzer(ast.NodeVisitor):
                 return False
             elif not len(node.body) == 1 and type(node.body[0]) is ast.Assign:
                 return False
-            elif not node.body[0].targets.value.id == "self":
+            elif not node.body[0].targets[0].value.id == "self":
                 return False
             return True
         except AttributeError:
@@ -118,7 +111,7 @@ class CodeAnalyzer(ast.NodeVisitor):
         try:
             if not node.name.startswith("get_"):
                 return False
-            elif not node.args.arg.arg == "self":
+            elif not node.args.args[0].arg == "self":
                 return False
             elif not len(node.body) == 1 and type(node.body[0]) is ast.Return:
                 return False
