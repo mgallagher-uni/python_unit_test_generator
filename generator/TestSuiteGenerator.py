@@ -28,15 +28,24 @@ class TestSuiteGenerator:
         directory = os.scandir(ent.path)
         for sub_ent in directory:
             
+            # when a folder is found
             if sub_ent.is_dir():
+                # do not enter ignored folders
                 if sub_ent.name in self.conf["ignore_folders"]:
                     continue
+                # enter folder and continue search
                 else:
                     self.traverse_directory(sub_ent)
 
+            # when a python file is found
             elif sub_ent.name.endswith(".py"):
+                # do not generate for ignored files
                 if sub_ent.name in self.conf["ignore_files"]:
                     continue
+                # ignore other test files by default
+                elif sub_ent.name.startswith("test_") or sub_ent.name.endswith("_test.py"):
+                    continue
+                # generate a test file for the given file
                 else:
                     self.generate_file(sub_ent)
 
