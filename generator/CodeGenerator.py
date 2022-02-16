@@ -19,21 +19,23 @@ class CodeGenerator:
 
         self.test_code += self.generate_import()
 
-        for class_info in self.code_dict["classes"].items():
-            self.test_code += self.generate_fixture_function(class_info)
+        if self.code_dict["classes"]:
 
-        for _class in self.code_dict["classes"].keys():
-            for meth_info in self.code_dict["classes"][_class]["methods"].items():
-                self.test_code += self.generate_test_case(meth_info, _class)
+            for class_info in self.code_dict["classes"].items():
+                self.test_code += self.generate_fixture_function(class_info)
 
-        if self.setters_getters:
-            for set_info in self.code_dict["classes"][_class]["setters"].items():
-                self.test_code += "# IT's a SeTTEer\n"
-                self.test_code += self.generate_test_case(set_info, _class)
+            for _class in self.code_dict["classes"].keys():
+                for meth_info in self.code_dict["classes"][_class]["methods"].items():
+                    self.test_code += self.generate_test_case(meth_info, _class)
 
-            for get_info in self.code_dict["classes"][_class]["getters"].items():
-                self.test_code += "# IT's a GeTTEer\n"
-                self.test_code += self.generate_test_case(get_info, _class)
+            if self.setters_getters:
+                for set_info in self.code_dict["classes"][_class]["setters"].items():
+                    self.test_code += "# IT's a SeTTEer\n"
+                    self.test_code += self.generate_test_case(set_info, _class)
+
+                for get_info in self.code_dict["classes"][_class]["getters"].items():
+                    self.test_code += "# IT's a GeTTEer\n"
+                    self.test_code += self.generate_test_case(get_info, _class)
 
 
         for func_info in self.code_dict["functions"].items():

@@ -1,1 +1,1 @@
-{"ignore_folders": ["__pycache__"], "ignore_files": ["__init__.py", "__main__.py", "sdfg"], "class_names_in_functions": false, "setters_getters": true}
+{"ignore_folders": [".git", "__pycache__"], "ignore_files": ["__init__.py", "__main__.py"], "class_names_in_functions": false, "setters_getters": true}

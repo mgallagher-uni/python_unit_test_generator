@@ -19,16 +19,22 @@ class CodeAnalyzer(ast.NodeVisitor):
         methods = list(filter( lambda node: isinstance(node, ast.FunctionDef), methods))
 
         # does class inherit from base class/es
-        bases = [
-            base.id if isinstance(base, ast.Name) else base.value.id + "." + base.attr
-            for base in node.bases
-        ]
+        bases = []
+        for base in node.bases:
+
+            base_str = ""
+            tmp_node = base
+            while isinstance(tmp_node, ast.Attribute):
+                base_str = "." + tmp_node.attr + base_str
+                tmp_node = tmp_node.value
+
+            base_str = tmp_node.id + base_str
+            bases.append(base_str)
 
         # if the class is a custom exception we won't create test cases
         if "Exception" in bases:
             self.generic_visit(node)
 
-        # does class have an __init__ function
         # find __init__ function
         init = list(filter( lambda node: node.name == "__init__", methods))
         if init:
